@@ -12,21 +12,21 @@
 		
 		<src>
 			<folder name="addons/ofxFFGLPlugin/src">			
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLPlugin.h</file>
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLPlugin.cpp</file>
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLApp.h</file>
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLApp.cpp</file>
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLWindow.h</file>
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLWindow.cpp</file>
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLParameter.h</file>
-			<file>../../../addons/ofxFFGLPlugin/src/ofxFFGLParameter.cpp</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLPlugin.h</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLPlugin.cpp</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLApp.h</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLApp.cpp</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLWindow.h</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLWindow.cpp</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLParameter.h</file>
+			<file>../../../addons/ofxFFGL/src/ofxFFGLParameter.cpp</file>
 			
 			</folder>
 		</src>
 
 		<include>
-			<path>../../../addons/ofxFFGLPlugin/src</path>
-			<path>../../../addons/ofxFFGLPlugin/libs/FFGL</path>
+			<path>../../../addons/ofxFFGL/src</path>
+			<path>../../../addons/ofxFFGL/libs/FFGL</path>
 		</include>
 		
 		<link>

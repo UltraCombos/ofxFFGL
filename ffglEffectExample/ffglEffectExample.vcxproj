@@ -98,7 +98,7 @@
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;OF_FFGL_NOSTDCALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGLPlugin\libs\FFGL;..\..\..\addons\ofxFFGLPlugin\src;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGL\libs\FFGL;..\..\..\addons\ofxFFGL\src;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>_USRDLL;OF_FFGL_NOSTDCALL;CAIRO_WIN32_STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGLPlugin\libs\FFGL;..\..\..\addons\ofxFFGLPlugin\src;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGL\libs\FFGL;..\..\..\addons\ofxFFGL\src;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
       <CompileAs>Default</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -190,7 +190,6 @@
     <ClCompile Include="..\libs\FFGL\FFGLPluginManager.cpp" />
     <ClCompile Include="..\libs\FFGL\FFGLPluginSDK.cpp" />
     <ClCompile Include="..\libs\FFGL\FFGLShader.cpp" />
-    <ClCompile Include="..\libs\FFGL\ofxFFPlugin.cpp" />
     <ClCompile Include="..\src\ofxFFGLApp.cpp" />
     <ClCompile Include="..\src\ofxFFGLParameter.cpp" />
     <ClCompile Include="..\src\ofxFFGLPlugin.cpp" />
@@ -208,7 +207,6 @@
     <ClInclude Include="..\libs\FFGL\FFGLPluginSDK.h" />
     <ClInclude Include="..\libs\FFGL\FFGLShader.h" />
     <ClInclude Include="..\libs\FFGL\FreeFrame.h" />
-    <ClInclude Include="..\libs\FFGL\ofxFFPlugin.h" />
     <ClInclude Include="..\src\ofxFFGLApp.h" />
     <ClInclude Include="..\src\ofxFFGLParameter.h" />
     <ClInclude Include="..\src\ofxFFGLPlugin.h" />
