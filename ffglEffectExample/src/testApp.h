@@ -24,7 +24,7 @@ class testApp : public ofFFGLApp{
 		ofParameter<float> numRepeats = 3;
 		bool _bool_para = true;
 		bool _event_para = false;
-		string _string_para;
+		ofParameter<string> _string_para;
 };
 
 #endif

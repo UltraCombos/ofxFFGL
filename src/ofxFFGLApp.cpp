@@ -33,14 +33,6 @@ ofFFGLApp::~ofFFGLApp()
 	}
 }
 
-
-void ofFFGLApp::addFloatParameter( const char * name, float * address, float min , float max  )
-{
-	ofFFGLParameter * p = new ofFFGLParameter();
-	p->initFloat(name,address,min,max);
-	parameters.push_back(p);
-}
-
 void ofFFGLApp::addBoolParameter( const char * name, bool * address )
 {
 	ofFFGLParameter * p = new ofFFGLParameter();
@@ -53,19 +45,5 @@ void ofFFGLApp::addEventParameter( const char * name, bool * address )
 {
 	ofFFGLParameter * p = new ofFFGLParameter();
 	p->initEvent(name,address);
-	parameters.push_back(p);
-}
-
-void ofFFGLApp::addCStringParameter( const char * name, char * address )
-{
-	ofFFGLParameter * p = new ofFFGLParameter();
-	p->initCString(name,address);
-	parameters.push_back(p);
-}
-
-void ofFFGLApp::addStringParameter( const char * name, std::string * address )
-{
-	ofFFGLParameter * p = new ofFFGLParameter();
-	p->initString(name,address);
 	parameters.push_back(p);
 }

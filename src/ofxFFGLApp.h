@@ -42,26 +42,22 @@ class ofFFGLApp : public ofBaseApp {
 		void addBoolParameter( const char * name, bool * address );
 		/// Add event parameter ( is actually a boolean )
 		void addEventParameter( const char * name, bool * address );
-		/// Add string parameter
-		void addStringParameter( const char * name, std::string * address );
-		/// Add C String paramter ( a buffer of chars with termination character '\0' at the end )
-		void addCStringParameter( const char * name, char * address );
-
+		
 		void addParameter(ofAbstractParameter& para)
 		{
-			if (para.type() == typeid(ofParameter<float>).name())
+			string type = para.type();
+			if (type == typeid(ofParameter<float>).name())
 			{
-				ofParameter<float>& fff = para.cast<float>();
-				addFloatParameter(para.getName().c_str(), const_cast<float*>(&fff.get()), fff.getMin(), fff.getMax());
+				paras.add(para);
+			}
+			else if (type == typeid(ofParameter<string>).name())
+			{
 				paras.add(para);
 			}
 		}
 		
 		ofTexture * inputTextures[MAX_INPUT_TEXTURES];
 private:
-	/// Add floating point parameter
-	void addFloatParameter(const char * name, float * address, float min = 0.0f, float max = 1.0f);
-
 };
 
 #endif

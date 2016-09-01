@@ -32,7 +32,6 @@ ofFFGLPlugin::~ofFFGLPlugin()
 
 void ofFFGLPlugin::initParameters()
 {
-	
 	for(int i = 0; i < _app->getNumParameters(); i++ )
 	{
 		ofFFGLParameter * v = _app->getParameter(i);
@@ -45,19 +44,6 @@ void ofFFGLPlugin::initParameters()
 				break;
 			}
 			
-			case PARAM_FLOAT:
-			{
-				SetParamInfo(i, v->getName(), FF_TYPE_STANDARD, v->getFloat01());
-				break;
-			}
-			
-			case PARAM_CSTRING:
-			case PARAM_STRING:
-			{
-				SetParamInfo(i,v->getName(),FF_TYPE_TEXT,v->getString());
-				break;
-			}
-
 			case PARAM_EVENT:
 			{
 				SetParamInfo(i,v->getName(), FF_TYPE_EVENT, v->getBool() );
@@ -65,9 +51,24 @@ void ofFFGLPlugin::initParameters()
 			}
 			default: ;
 		}
-		
 	}
-	
+
+	for (size_t i = 0; i < _app->paras.size(); i++)
+	{
+		ofAbstractParameter& para = _app->paras.get(i);
+		string type = para.type();
+		if (type == typeid(ofParameter<float>).name())
+		{
+			ofParameter<float>& fff = para.cast<float>();
+			float val01 = (fff - fff.getMin()) / (fff.getMax() - fff.getMin());
+			SetParamInfo(i+ _app->parameters.size(), para.getName().c_str(), FF_TYPE_STANDARD, val01);
+		}
+		else if (type == typeid(ofParameter<string>).name())
+		{
+			ofParameter<string>& fff = para.cast<string>();
+			SetParamInfo(i + _app->parameters.size(), fff.getName().c_str(), FF_TYPE_TEXT, fff->c_str());
+		}
+	}
 }
 
 DWORD ofFFGLPlugin::InitGL(const FFGLViewportStruct *vp)
@@ -187,125 +188,158 @@ DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 {
 	DWORD dwRet;
 
-	ofFFGLParameter * v = _app->getParameter(dwIndex);
-	
-	if(!v)
+	if (dwIndex >= _app->parameters.size())
 	{
-		return FF_FAIL;
-	}
-	
-	switch(v->getType())
-	{
-		case PARAM_FLOAT:
+		dwIndex -= _app->parameters.size();
+		ofAbstractParameter& para = _app->paras.get(dwIndex);
+		string type = para.type();
+		if (type == typeid(ofParameter<float>).name())
 		{
-			float val = (v->getFloat() - v->getMin()) / (v->getMax()-v->getMin());
-			 *((float *)(unsigned)&dwRet) = val;
+			ofParameter<float>& fff = para.cast<float>();
+			float val = (fff - fff.getMin()) / (fff.getMax() - fff.getMin());
+			*((float *)(unsigned)&dwRet) = val;
 			return dwRet;
-		}	
-		
-		case PARAM_CSTRING:
-		case PARAM_STRING:
+		}
+		else if (type == typeid(ofParameter<string>).name())
 		{
-			const char * str = v->getString();
+			ofParameter<string>& fff = para.cast<string>();
+			const char * str = fff->c_str();
 			dwRet = (DWORD)str;
 			return dwRet;
 		}
-		
+	}
+	else
+	{
+		ofFFGLParameter * v = _app->getParameter(dwIndex);
+
+		if (!v)
+		{
+			return FF_FAIL;
+		}
+
+		switch (v->getType())
+		{
 		case PARAM_BOOL:
 		case PARAM_EVENT:
 		{
 			*((float *)(unsigned)&dwRet) = v->getBool();
 			return dwRet;
 		}
-		
-		
+
 		default:
 		{
 			return FF_FAIL;
 		}
+		}
 	}
-	
 	return FF_FAIL;
 }
 
 DWORD ofFFGLPlugin::SetParameter(const SetParameterStruct* pParam)
 {
-	ofFFGLParameter * v = _app->getParameter(pParam->ParameterNumber);
-	if(!v)
-	{
-		//debugPrint("ofFFGLPlugin::SetParameter unknown parameter %d\n",pParam->ParameterNumber);
-		return FF_FAIL;
-	}
-	
-	switch(v->getType())
-	{
-		case PARAM_FLOAT:
-		{
-			float val =  *((float *)(unsigned)&(pParam->NewParameterValue));
-			v->setFloat( v->getMin() + val*(v->getMax()-v->getMin()) );
-			_app->onParameterChanged(v);
-			//ofParameter<float>& fff = _app->paras.getFloat(v->getName());
-			//fff = val;
+	DWORD vp = pParam->NewParameterValue;
 
+	int idx = pParam->ParameterNumber;
+
+	if (idx >= _app->parameters.size())
+	{
+		idx -= _app->parameters.size();
+		ofAbstractParameter& para = _app->paras.get(idx);
+		string type = para.type();
+		if (type == typeid(ofParameter<float>).name())
+		{
+			ofParameter<float>& fff = para.cast<float>();
+			float val = *((float *)(unsigned)&vp);
+			fff = fff.getMin() + val*(fff.getMax() - fff.getMin());
 			return FF_SUCCESS;
-		}	
-		
+		}
+		else if (type == typeid(ofParameter<string>).name())
+		{
+			ofParameter<string>& fff = para.cast<string>();
+			char * str = (char*)vp;
+			fff = str;
+			return FF_SUCCESS;
+		}
+	}
+	else
+	{
+		ofFFGLParameter * v = _app->getParameter(idx);
+		if (!v)
+		{
+			//debugPrint("ofFFGLPlugin::SetParameter unknown parameter %d\n",pParam->ParameterNumber);
+			return FF_FAIL;
+		}
+
+		switch (v->getType())
+		{
 		case PARAM_CSTRING:
 		case PARAM_STRING:
 		{
-			char * str = (char*)(pParam->NewParameterValue);
+			char * str = (char*)vp;
 			v->setString(str);
 			_app->onParameterChanged(v);
 
 			return FF_SUCCESS;
 		}
-		
+
 		case PARAM_BOOL:
 		case PARAM_EVENT:
 		{
-			float val =  *((float *)(unsigned)&(pParam->NewParameterValue));
+			float val = *((float *)(unsigned)&vp);
 			v->setBool((bool)val);
 			_app->onParameterChanged(v);
 			return FF_SUCCESS;
 		}
-		
+
 		default:
 		{
 			//debugPrint("ofFFGLPlugin::SetParameter  unknown parameter type for %s\n",v->getName().str);
 			return FF_FAIL;
 		}
+		}
 	}
-	
 	return FF_FAIL;
 }
 
 char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex) 
 {
-	ofFFGLParameter * v = _app->getParameter(dwIndex);
-	
-	if(!v)
+	if (dwIndex >= _app->parameters.size())
 	{
-		printf("No param!");
-		return 0;
-	}
-
-	switch( v->getType() )
-	{
-		case PARAM_FLOAT:
-			sprintf(_paramDisplay,"aaa%0.2f",v->getFloat());
+		dwIndex -= _app->parameters.size();
+		ofAbstractParameter& para = _app->paras.get(dwIndex);
+		string type = para.type();
+		if (type == typeid(ofParameter<float>).name())
+		{
+			ofParameter<float>& fff = para.cast<float>();
+			sprintf(_paramDisplay, "aaa%0.2f", fff.get());
 			return _paramDisplay;
-			
+		}
+		else if (type == typeid(ofParameter<string>).name())
+		{
+			ofParameter<string>& fff = para.cast<string>();
+			return (char*)fff->c_str();
+		}
+	}
+	else
+	{
+		ofFFGLParameter * v = _app->getParameter(dwIndex);
+
+		if (!v)
+		{
+			printf("No param!");
+			return 0;
+		}
+
+		switch (v->getType())
+		{
 		case PARAM_BOOL:
 		case PARAM_EVENT:
-			sprintf(_paramDisplay,"%d",v->getBool());
+			sprintf(_paramDisplay, "%d", v->getBool());
 			return _paramDisplay;
-			
-		case PARAM_STRING:
-		case PARAM_CSTRING:
-			return (char*)v->getString();
-        default: ;
+
+		default:;
+		}
 	}
-	
 	return 0;
 	
 }

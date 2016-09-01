@@ -49,13 +49,13 @@ char* CFreeFrameGLPlugin::GetParameterDisplay(DWORD dwIndex)
 	DWORD dwValue = m_pPlugin->GetParameter(dwIndex);
 
 	if ((dwValue != FF_FAIL) && (dwType != FF_FAIL))
-  {
+	{
 		if (dwType == FF_TYPE_TEXT)
-    {
+		{
 			return (char *)dwValue;
-    }
+		}
 		else
-    {
+		{
 			float fValue;
 			memcpy(&fValue, &dwValue, 4);
 			memset(s_DisplayValue, 0, 5);
