@@ -4,8 +4,10 @@
 testApp::testApp()
 {
 	addParameter(numRepeats.set("num repeats", numRepeats, 1, 20));
-	addBoolParameter("bool para", &_bool_para);
-	addEventParameter("event", &_event_para);
+	addParameter(bbbbb.set("num repeatssss", bbbbb, 1, 20));
+	addParameter(_bool_para.set("bool_para", _bool_para));
+	addEventParameter(_event_para.set("event", _event_para));
+	_event_para.addListener(this, &testApp::_on_event);
 	addParameter(_string_para.set("str", _string_para));
 }
 

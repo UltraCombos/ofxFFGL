@@ -98,14 +98,16 @@
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;OF_FFGL_NOSTDCALL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGL\libs\FFGL;..\..\..\addons\ofxFFGL\src;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGL\libs\FFGL;
+..\..\..\addons\ofxFFGL\src;
+"$(INHERIT)";
+src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>ofFFGL.def</ModuleDefinitionFile>
     </Link>
@@ -124,7 +126,6 @@ if errorlevel 1 exit 0 else exit %errorlevel%
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -132,7 +133,6 @@ if errorlevel 1 exit 0 else exit %errorlevel%
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -143,7 +143,10 @@ if errorlevel 1 exit 0 else exit %errorlevel%
       <PreprocessorDefinitions>_USRDLL;OF_FFGL_NOSTDCALL;CAIRO_WIN32_STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGL\libs\FFGL;..\..\..\addons\ofxFFGL\src;%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGL\libs\FFGL;
+..\..\..\addons\ofxFFGL\src;
+"$(INHERIT)";
+src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>Default</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -154,17 +157,14 @@ if errorlevel 1 exit 0 else exit %errorlevel%
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>ofFFGL.def</ModuleDefinitionFile>
       <IgnoreSpecificDefaultLibraries>cairo-static.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>%(commands)
-robocopy "$(ProjectDir)bin/" "C:\Program Files (x86)\Resolume Arena 5.0.4\plugins\vfx" "*.dll" /njs /njh /np /fp /bytes
-if errorlevel 1 exit 0 else exit %errorlevel%
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -173,7 +173,10 @@ if errorlevel 1 exit 0 else exit %errorlevel%
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxFFGL\libs\FFGL;
+..\..\..\addons\ofxFFGL\src;
+"$(INHERIT)";
+src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -183,7 +186,6 @@ if errorlevel 1 exit 0 else exit %errorlevel%
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -203,7 +205,6 @@ if errorlevel 1 exit 0 else exit %errorlevel%
     <ClCompile Include="..\libs\FFGL\FFGLPluginSDK.cpp" />
     <ClCompile Include="..\libs\FFGL\FFGLShader.cpp" />
     <ClCompile Include="..\src\ofxFFGLApp.cpp" />
-    <ClCompile Include="..\src\ofxFFGLParameter.cpp" />
     <ClCompile Include="..\src\ofxFFGLPlugin.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\testApp.cpp" />
@@ -220,7 +221,6 @@ if errorlevel 1 exit 0 else exit %errorlevel%
     <ClInclude Include="..\libs\FFGL\FFGLShader.h" />
     <ClInclude Include="..\libs\FFGL\FreeFrame.h" />
     <ClInclude Include="..\src\ofxFFGLApp.h" />
-    <ClInclude Include="..\src\ofxFFGLParameter.h" />
     <ClInclude Include="..\src\ofxFFGLPlugin.h" />
     <ClInclude Include="src\testApp.h" />
   </ItemGroup>

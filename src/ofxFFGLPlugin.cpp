@@ -9,6 +9,7 @@
  */
 
 #include "ofxFFGLPlugin.h"
+#include "ofxFFGLApp.h"
 
 #define FFPARAM_BRIGHTNESS (0)
 
@@ -32,42 +33,40 @@ ofFFGLPlugin::~ofFFGLPlugin()
 
 void ofFFGLPlugin::initParameters()
 {
-	for(int i = 0; i < _app->getNumParameters(); i++ )
+	for (size_t j = 0; j < _app->paras.size(); j++)
 	{
-		ofFFGLParameter * v = _app->getParameter(i);
-		
-		switch( v->getType() )
-		{
-			case PARAM_BOOL:
-			{
-				SetParamInfo(i, v->getName(), FF_TYPE_BOOLEAN, v->getBool());
-				break;
-			}
-			
-			case PARAM_EVENT:
-			{
-				SetParamInfo(i,v->getName(), FF_TYPE_EVENT, v->getBool() );
-				break;
-			}
-			default: ;
-		}
-	}
-
-	for (size_t i = 0; i < _app->paras.size(); i++)
-	{
-		ofAbstractParameter& para = _app->paras.get(i);
+		ofAbstractParameter& para = _app->paras.get(j);
 		string type = para.type();
+		int idx = j;
 		if (type == typeid(ofParameter<float>).name())
 		{
 			ofParameter<float>& fff = para.cast<float>();
 			float val01 = (fff - fff.getMin()) / (fff.getMax() - fff.getMin());
-			SetParamInfo(i+ _app->parameters.size(), para.getName().c_str(), FF_TYPE_STANDARD, val01);
+			SetParamInfo(idx, fff.getName().c_str(), FF_TYPE_STANDARD, val01);
 		}
 		else if (type == typeid(ofParameter<string>).name())
 		{
 			ofParameter<string>& fff = para.cast<string>();
-			SetParamInfo(i + _app->parameters.size(), fff.getName().c_str(), FF_TYPE_TEXT, fff->c_str());
+			SetParamInfo(idx, fff.getName().c_str(), FF_TYPE_TEXT, fff->c_str());
 		}
+		else if (type == typeid(ofParameter<bool>).name())
+		{
+			ofParameter<bool>& fff = para.cast<bool>();
+			SetParamInfo(idx, fff.getName().c_str(), FF_TYPE_BOOLEAN, fff);
+		}
+		else if (type == typeid(_FFGL_event).name())
+		{
+			ofParameter<bool>& fff = para.cast<bool>();
+			SetParamInfo(idx, fff.getName().c_str(), FF_TYPE_EVENT, fff);
+		}
+		
+		/*
+			#define FF_TYPE_RED					2
+			#define FF_TYPE_GREEN				3
+			#define FF_TYPE_BLUE				4
+			#define FF_TYPE_XPOS				5
+			#define FF_TYPE_YPOS				6
+		*/
 	}
 }
 
@@ -133,7 +132,6 @@ void	ofFFGLPlugin::setupInputTextures(ProcessOpenGLStruct* pGL)
 	}
 }
 
-
 DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 {
 	if(!isGLInitialized)
@@ -156,7 +154,7 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 
 	// we reset the host fbo id here
 	// in case we have been rendering offscreen in the plugin.
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,pGL->HostFBO);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, pGL->HostFBO);
 	
 	// TODO it may be necessary to even do this:
 	// but it's a bit of a hack....
@@ -177,7 +175,6 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 	return FF_SUCCESS;
 }
 
-
 DWORD	ofFFGLPlugin::SetTime(double time)
 {
 	// todo.....
@@ -186,52 +183,34 @@ DWORD	ofFFGLPlugin::SetTime(double time)
 
 DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 {
-	DWORD dwRet;
+	DWORD dwRet = FF_FAIL;
 
-	if (dwIndex >= _app->parameters.size())
+	if (dwIndex >= _app->paras.size())
+		return FF_FAIL;
+
+	ofAbstractParameter& para = _app->paras.get(dwIndex);
+	string type = para.type();
+	if (type == typeid(ofParameter<float>).name())
 	{
-		dwIndex -= _app->parameters.size();
-		ofAbstractParameter& para = _app->paras.get(dwIndex);
-		string type = para.type();
-		if (type == typeid(ofParameter<float>).name())
-		{
-			ofParameter<float>& fff = para.cast<float>();
-			float val = (fff - fff.getMin()) / (fff.getMax() - fff.getMin());
-			*((float *)(unsigned)&dwRet) = val;
-			return dwRet;
-		}
-		else if (type == typeid(ofParameter<string>).name())
-		{
-			ofParameter<string>& fff = para.cast<string>();
-			const char * str = fff->c_str();
-			dwRet = (DWORD)str;
-			return dwRet;
-		}
+		ofParameter<float>& fff = para.cast<float>();
+		float val = (fff - fff.getMin()) / (fff.getMax() - fff.getMin());
+		*((float *)(unsigned)&dwRet) = val;
+		return dwRet;
 	}
-	else
+	else if (type == typeid(ofParameter<string>).name())
 	{
-		ofFFGLParameter * v = _app->getParameter(dwIndex);
-
-		if (!v)
-		{
-			return FF_FAIL;
-		}
-
-		switch (v->getType())
-		{
-		case PARAM_BOOL:
-		case PARAM_EVENT:
-		{
-			*((float *)(unsigned)&dwRet) = v->getBool();
-			return dwRet;
-		}
-
-		default:
-		{
-			return FF_FAIL;
-		}
-		}
+		ofParameter<string>& fff = para.cast<string>();
+		const char * str = fff->c_str();
+		//dwRet = (DWORD)str;
+		return dwRet;
 	}
+	else if (type == typeid(ofParameter<bool>).name() || type == typeid(_FFGL_event).name())
+	{
+		ofParameter<bool>& fff = para.cast<bool>();
+		*((float *)(unsigned)&dwRet) = fff;
+		return dwRet;
+	}
+
 	return FF_FAIL;
 }
 
@@ -241,106 +220,62 @@ DWORD ofFFGLPlugin::SetParameter(const SetParameterStruct* pParam)
 
 	int idx = pParam->ParameterNumber;
 
-	if (idx >= _app->parameters.size())
+	if (idx >= _app->paras.size())
+		return 0;
+
+	ofAbstractParameter& para = _app->paras.get(idx);
+	string type = para.type();
+	if (type == typeid(ofParameter<float>).name())
 	{
-		idx -= _app->parameters.size();
-		ofAbstractParameter& para = _app->paras.get(idx);
-		string type = para.type();
-		if (type == typeid(ofParameter<float>).name())
-		{
-			ofParameter<float>& fff = para.cast<float>();
-			float val = *((float *)(unsigned)&vp);
-			fff = fff.getMin() + val*(fff.getMax() - fff.getMin());
-			return FF_SUCCESS;
-		}
-		else if (type == typeid(ofParameter<string>).name())
-		{
-			ofParameter<string>& fff = para.cast<string>();
-			char * str = (char*)vp;
-			fff = str;
-			return FF_SUCCESS;
-		}
+		ofParameter<float>& fff = para.cast<float>();
+		float val = *((float *)(unsigned)&vp);
+		fff = fff.getMin() + val*(fff.getMax() - fff.getMin());
+		return FF_SUCCESS;
 	}
-	else
+	else if (type == typeid(ofParameter<string>).name())
 	{
-		ofFFGLParameter * v = _app->getParameter(idx);
-		if (!v)
-		{
-			//debugPrint("ofFFGLPlugin::SetParameter unknown parameter %d\n",pParam->ParameterNumber);
-			return FF_FAIL;
-		}
-
-		switch (v->getType())
-		{
-		case PARAM_CSTRING:
-		case PARAM_STRING:
-		{
-			char * str = (char*)vp;
-			v->setString(str);
-			_app->onParameterChanged(v);
-
-			return FF_SUCCESS;
-		}
-
-		case PARAM_BOOL:
-		case PARAM_EVENT:
-		{
-			float val = *((float *)(unsigned)&vp);
-			v->setBool((bool)val);
-			_app->onParameterChanged(v);
-			return FF_SUCCESS;
-		}
-
-		default:
-		{
-			//debugPrint("ofFFGLPlugin::SetParameter  unknown parameter type for %s\n",v->getName().str);
-			return FF_FAIL;
-		}
-		}
+		ofParameter<string>& fff = para.cast<string>();
+		char * str = (char*)vp;
+		fff = str;
+		return FF_SUCCESS;
 	}
+	else if (type == typeid(ofParameter<bool>).name() || type == typeid(_FFGL_event).name())
+	{
+		ofParameter<bool>& fff = para.cast<bool>();
+		float val = *((float *)(unsigned)&vp);
+		fff = (bool)val;
+		return FF_SUCCESS;
+	}
+
 	return FF_FAIL;
 }
 
-char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex) 
+char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex)
 {
-	if (dwIndex >= _app->parameters.size())
+	if (dwIndex >= _app->paras.size())
+		return 0;
+
+	ofAbstractParameter& para = _app->paras.get(dwIndex);
+	string type = para.type();
+	if (type == typeid(ofParameter<float>).name())
 	{
-		dwIndex -= _app->parameters.size();
-		ofAbstractParameter& para = _app->paras.get(dwIndex);
-		string type = para.type();
-		if (type == typeid(ofParameter<float>).name())
-		{
-			ofParameter<float>& fff = para.cast<float>();
-			sprintf(_paramDisplay, "aaa%0.2f", fff.get());
-			return _paramDisplay;
-		}
-		else if (type == typeid(ofParameter<string>).name())
-		{
-			ofParameter<string>& fff = para.cast<string>();
-			return (char*)fff->c_str();
-		}
+		ofParameter<float>& fff = para.cast<float>();
+		sprintf(_paramDisplay, "aaa %0.2f", fff.get());
+		return _paramDisplay;
 	}
-	else
+	else if (type == typeid(ofParameter<string>).name())
 	{
-		ofFFGLParameter * v = _app->getParameter(dwIndex);
-
-		if (!v)
-		{
-			printf("No param!");
-			return 0;
-		}
-
-		switch (v->getType())
-		{
-		case PARAM_BOOL:
-		case PARAM_EVENT:
-			sprintf(_paramDisplay, "%d", v->getBool());
-			return _paramDisplay;
-
-		default:;
-		}
+		ofParameter<string> fff = para.cast<string>();
+		sprintf(_paramDisplay, "%s", fff->c_str());
+		return _paramDisplay;
 	}
+	else if (type == typeid(ofParameter<bool>).name() || type == typeid(_FFGL_event).name())
+	{
+		ofParameter<bool>& fff = para.cast<bool>();
+		sprintf(_paramDisplay, "%d", fff);
+		return _paramDisplay;
+	}
+
 	return 0;
-	
 }
 	

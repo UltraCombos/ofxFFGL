@@ -22,9 +22,20 @@ class testApp : public ofFFGLApp{
 		void windowResized(int w, int h);
 		
 		ofParameter<float> numRepeats = 3;
-		bool _bool_para = true;
-		bool _event_para = false;
-		ofParameter<string> _string_para;
+		ofParameter<float> bbbbb = 3;
+		ofParameter<bool> _bool_para = true;
+		ofParameter<bool> _event_para;
+		ofParameter<string> _string_para = "";
+
+		void _on_event(bool& b)
+		{
+			if (!b)
+				return;
+
+			_string_para += "event!!! ";
+			if (_string_para->length() > 50)
+				_string_para = "";
+		}
 };
 
 #endif

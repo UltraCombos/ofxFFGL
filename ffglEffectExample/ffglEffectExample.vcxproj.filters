@@ -52,9 +52,6 @@
     <ClCompile Include="..\libs\FFGL\FFGL.cpp">
       <Filter>addons\ofxFFGL\libs\FFGL</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ofxFFGLParameter.cpp">
-      <Filter>addons\ofxFFGL\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ofxFFGLPlugin.cpp">
       <Filter>addons\ofxFFGL\src</Filter>
     </ClCompile>
@@ -95,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="..\libs\FFGL\FreeFrame.h">
       <Filter>addons\ofxFFGL\libs\FFGL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ofxFFGLParameter.h">
-      <Filter>addons\ofxFFGL\src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ofxFFGLPlugin.h">
       <Filter>addons\ofxFFGL\src</Filter>

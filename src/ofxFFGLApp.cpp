@@ -12,16 +12,14 @@
 
 ofFFGLApp::ofFFGLApp()
 {
-	parameters.clear();
+	paras.clear();
 	for( int i = 0; i < MAX_INPUT_TEXTURES; i++ )
 		inputTextures[i] = 0;
 }
 
 ofFFGLApp::~ofFFGLApp()
 {
-	for(int i = 0; i < parameters.size(); i++ )
-		delete parameters[i];
-	parameters.clear();
+	paras.clear();
 
 	for( int i = 0; i < MAX_INPUT_TEXTURES; i++ )
 	{
@@ -33,17 +31,27 @@ ofFFGLApp::~ofFFGLApp()
 	}
 }
 
-void ofFFGLApp::addBoolParameter( const char * name, bool * address )
+void ofFFGLApp::addParameter(ofAbstractParameter& para)
 {
-	ofFFGLParameter * p = new ofFFGLParameter();
-	p->initBool(name,address);
-	parameters.push_back(p);
+	string type = para.type();
+	if (type == typeid(ofParameter<float>).name())
+	{
+		paras.add(para);
+	}
+	else if (type == typeid(ofParameter<string>).name())
+	{
+		paras.add(para);
+	}
+	else if (type == typeid(ofParameter<bool>).name())
+	{
+		paras.add(para);
+	}
 }
 
-
-void ofFFGLApp::addEventParameter( const char * name, bool * address )
+void ofFFGLApp::addEventParameter(ofParameter<bool>& para)
 {
-	ofFFGLParameter * p = new ofFFGLParameter();
-	p->initEvent(name,address);
-	parameters.push_back(p);
+	_event_paras.emplace_back(_FFGL_event());
+	_event_paras.back().makeReferenceTo(para);
+	_event_paras.back().set(false);
+	paras.add(_event_paras.back());
 }
