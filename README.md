@@ -1,6 +1,7 @@
 # ofxFFGL
-this repo is a work in progress, the main focus wil be on Windows development.
-for now, you need to comment out line 97 in ofAppRunner.cpp to run the FFGL plugin in Arena.
+- this repo is a work in progress, the main focus wil be on Windows development.
+- for now, you need to comment out line 97 in ofAppRunner.cpp to run the FFGL plugin in Arena.
+- this work is based on code by https://github.com/sambenito/ofxffglplugin
 
 # ofxFFGLPlugin addon for openFrameworks
 > Daniel Berio 2010
