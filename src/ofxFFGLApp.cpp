@@ -50,8 +50,8 @@ void ofFFGLApp::addParameter(ofAbstractParameter& para)
 
 void ofFFGLApp::addEventParameter(ofParameter<bool>& para)
 {
-	_event_paras.emplace_back(_FFGL_event());
-	_event_paras.back().makeReferenceTo(para);
-	_event_paras.back().set(false);
-	paras.add(_event_paras.back());
+	_FFGL_event _eve = _FFGL_event();
+	_eve.makeReferenceTo(para);
+	_eve.set(false);
+	paras.add(_eve);
 }

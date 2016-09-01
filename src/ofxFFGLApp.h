@@ -38,7 +38,6 @@ class ofFFGLApp : public ofBaseApp {
 		
 		ofTexture * inputTextures[MAX_INPUT_TEXTURES];
 private:
-	vector<_FFGL_event> _event_paras;
 };
 
 #endif
