@@ -16,7 +16,6 @@
 #include <FFGLLib.h>
 #include "FFGLPluginSDK.h"
 
-
 /// Plugin creation call. With Visual Studio __stdcall does not compile
 #define DEFINE_FFGL_PLUGIN( appType, minInputs, maxInputs )  \
 static DWORD __stdcall createPluginInstance(CFreeFrameGLPlugin **ppInstance) \
@@ -45,15 +44,14 @@ public:
 	
 	DWORD	SetParameter(const SetParameterStruct* pParam);		
 	DWORD	GetParameter(DWORD dwIndex);					
-	//char*	GetParameterDisplay(DWORD dwIndex);
+	char*	GetParameterDisplay(DWORD dwIndex) override;
 	
 protected:
-	char _paramDisplay[128];
+	char _paramDisplay[100];
 	
 	bool isGLInitialized;
 	
 	shared_ptr<ofFFGLApp>  	_app;
-	//ofFFGLWindow *  _ofWin;
 	shared_ptr<ofAppGLFWWindow>  _ofWin;
 
 	float m_brightness;

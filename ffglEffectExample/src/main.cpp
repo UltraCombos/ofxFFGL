@@ -1,9 +1,5 @@
-//#include "ofMain.h"
-
 #include "ofxFFGLPlugin.h"
-
 #include "testApp.h"
-
 
 // Here is the main difference between a normal openFrameworks app and a OF FFGL plugin:
 
@@ -34,8 +30,6 @@ static CFFGLPluginInfo PluginInfo (
 	FF_EFFECT,								// Plugin type FF_SOURCE or FF_EFFECT ( filters ) 
 	"Test OpenFrameworks Plugin",			// Plugin description
 	"by Daniel Berio - www.enist.org"		// About
-	//,0										// *
-	//,NULL									// *
 );
 
 

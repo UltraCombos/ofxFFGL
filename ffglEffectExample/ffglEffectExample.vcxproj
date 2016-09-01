@@ -154,6 +154,12 @@
       <IgnoreSpecificDefaultLibraries>cairo-static.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>%(commands)
+robocopy "$(ProjectDir)bin/" "C:\Program Files (x86)\Resolume Arena 5.0.4\plugins\vfx" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
