@@ -3,15 +3,11 @@
 
 testApp::testApp()
 {
-	// add parameters
-	
-	numRepeats = 3;
-	
-	addFloatParameter(	"num repeats",	// name of parameter ( as it will appear in host )
-						&numRepeats,	// address of the float this parameter will point to
-						1,				// minimum value
-						20				// maximum value
-					  );
+	addParameter(numRepeats.set("num repeats", numRepeats, 1, 20));
+
+	addBoolParameter("bool para", &_bool_para);
+	addEventParameter("event", &_event_para);
+	addStringParameter("str", &_string_para);
 }
 
 //--------------------------------------------------------------
@@ -41,6 +37,8 @@ void testApp::draw(){
 		{
 			tex->draw(w*x,h*y,w,h);
 		}
+	ofDrawBitmapString(_string_para, 0, ofGetHeight()/2);
+	ofDrawBitmapString(_bool_para, 0, ofGetHeight() / 2 + 20);
 }
 
 

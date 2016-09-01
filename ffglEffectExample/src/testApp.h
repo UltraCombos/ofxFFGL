@@ -2,6 +2,7 @@
 #define _TEST_APP
 
 #include "ofxFFGLApp.h"
+#include "ofParameter.h"
 
 class testApp : public ofFFGLApp{
 	
@@ -20,12 +21,10 @@ class testApp : public ofFFGLApp{
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
 		
-
-		float numRepeats;
-		void audioIn(class ofSoundBuffer &) {};
-		void audioIn(float *, int, int, int, unsigned __int64) {};
-		void audioOut(ofSoundBuffer &outBuffer) {};
-		void audioIn(float * input, int bufferSize, int nChannels) {};
+		ofParameter<float> numRepeats = 3;
+		bool _bool_para = true;
+		bool _event_para = false;
+		string _string_para;
 };
 
 #endif

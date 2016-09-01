@@ -133,7 +133,6 @@ void	ofFFGLPlugin::setupInputTextures(ProcessOpenGLStruct* pGL)
 }
 
 
-
 DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 {
 	if(!isGLInitialized)
@@ -184,8 +183,6 @@ DWORD	ofFFGLPlugin::SetTime(double time)
 	 return FF_SUCCESS; 
 }
 
-
-
 DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 {
 	DWORD dwRet;
@@ -199,7 +196,6 @@ DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 	
 	switch(v->getType())
 	{
-		
 		case PARAM_FLOAT:
 		{
 			float val = (v->getFloat() - v->getMin()) / (v->getMax()-v->getMin());
@@ -243,14 +239,14 @@ DWORD ofFFGLPlugin::SetParameter(const SetParameterStruct* pParam)
 	
 	switch(v->getType())
 	{
-		
-			
 		case PARAM_FLOAT:
 		{
 			float val =  *((float *)(unsigned)&(pParam->NewParameterValue));
-			
 			v->setFloat( v->getMin() + val*(v->getMax()-v->getMin()) );
 			_app->onParameterChanged(v);
+			//ofParameter<float>& fff = _app->paras.getFloat(v->getName());
+			//fff = val;
+
 			return FF_SUCCESS;
 		}	
 		
@@ -283,8 +279,7 @@ DWORD ofFFGLPlugin::SetParameter(const SetParameterStruct* pParam)
 	return FF_FAIL;
 }
 
-#if 0
-char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex)
+char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex) 
 {
 	ofFFGLParameter * v = _app->getParameter(dwIndex);
 	
@@ -293,11 +288,11 @@ char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex)
 		printf("No param!");
 		return 0;
 	}
-	
+
 	switch( v->getType() )
 	{
 		case PARAM_FLOAT:
-			sprintf(_paramDisplay,"%0.2f",v->getFloat());
+			sprintf(_paramDisplay,"aaa%0.2f",v->getFloat());
 			return _paramDisplay;
 			
 		case PARAM_BOOL:
@@ -314,5 +309,4 @@ char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex)
 	return 0;
 	
 }
-#endif
 	

@@ -13,6 +13,7 @@
 
 #include "ofMain.h"
 #include "ofxFFGLParameter.h"
+#include "ofParameterGroup.h"
 
 #define MAX_INPUT_TEXTURES 3
 
@@ -26,6 +27,7 @@ class ofFFGLApp : public ofBaseApp {
 		virtual void onParameterChanged( ofFFGLParameter * param ) {}
 		
 		vector < ofFFGLParameter * > parameters;
+		ofParameterGroup paras;
 		
 		int	getNumParameters() const { return parameters.size(); }
 		
@@ -36,8 +38,6 @@ class ofFFGLApp : public ofBaseApp {
 		// We could add normal FFGL parameter handling but this way even though it is more limited, it makes life much easier
 		// Parameters MUST be added in the constructor or FFGL will ignore them.
 		
-		/// Add floating point parameter
-		void addFloatParameter( const char * name, float * address, float min = 0.0f, float max = 1.0f );
 		/// Add boolean parameter
 		void addBoolParameter( const char * name, bool * address );
 		/// Add event parameter ( is actually a boolean )
@@ -46,8 +46,21 @@ class ofFFGLApp : public ofBaseApp {
 		void addStringParameter( const char * name, std::string * address );
 		/// Add C String paramter ( a buffer of chars with termination character '\0' at the end )
 		void addCStringParameter( const char * name, char * address );
+
+		void addParameter(ofAbstractParameter& para)
+		{
+			if (para.type() == typeid(ofParameter<float>).name())
+			{
+				ofParameter<float>& fff = para.cast<float>();
+				addFloatParameter(para.getName().c_str(), const_cast<float*>(&fff.get()), fff.getMin(), fff.getMax());
+				paras.add(para);
+			}
+		}
 		
 		ofTexture * inputTextures[MAX_INPUT_TEXTURES];
+private:
+	/// Add floating point parameter
+	void addFloatParameter(const char * name, float * address, float min = 0.0f, float max = 1.0f);
 
 };
 
