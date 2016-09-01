@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{cd0e5508-500d-43df-89a9-148049f24298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFGLPlugin">
+      <UniqueIdentifier>{16aa8761-d13e-4df5-8781-8af4bc87a7ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFGLPlugin\libs">
+      <UniqueIdentifier>{323d5d2b-2872-4062-8087-3a072b4a8b24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFGLPlugin\libs\FFGL">
+      <UniqueIdentifier>{b21a7fc3-6ab6-40e7-8445-68a71971ee55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFGLPlugin\src">
+      <UniqueIdentifier>{72a7840f-bc3b-4530-918a-c72eba8cce3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs">
+      <UniqueIdentifier>{d88904b0-d53e-4788-854b-494f47c9da08}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\testApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGL.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLExtensions.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLFBO.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginInfo.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginInfoData.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginManager.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginSDK.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLShader.cpp">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLApp.cpp">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLParameter.cpp">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLPlugin.cpp">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLWindow.cpp">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\testApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofAddons.h">
+      <Filter>addons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGL.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLExtensions.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLFBO.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLLib.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginInfo.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginManager.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginManager_inl.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLPluginSDK.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FFGLShader.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\libs\FFGL\FreeFrame.h">
+      <Filter>addons\ofxFFGLPlugin\libs\FFGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLApp.h">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLParameter.h">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLPlugin.h">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxFFGLPlugin\src\ofxFFGLWindow.h">
+      <Filter>addons\ofxFFGLPlugin\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
