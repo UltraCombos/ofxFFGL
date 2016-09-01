@@ -44,7 +44,7 @@ public:
 	
 	DWORD	SetParameter(const SetParameterStruct* pParam);		
 	DWORD	GetParameter(DWORD dwIndex);					
-	char*	GetParameterDisplay(DWORD dwIndex) override;
+	//char*	GetParameterDisplay(DWORD dwIndex) override;
 	
 protected:
 	char _paramDisplay[100];

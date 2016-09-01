@@ -249,33 +249,33 @@ DWORD ofFFGLPlugin::SetParameter(const SetParameterStruct* pParam)
 
 	return FF_FAIL;
 }
-
-char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex)
-{
-	if (dwIndex >= _app->paras.size())
-		return 0;
-
-	ofAbstractParameter& para = _app->paras.get(dwIndex);
-	string type = para.type();
-	if (type == typeid(ofParameter<float>).name())
-	{
-		ofParameter<float>& fff = para.cast<float>();
-		sprintf(_paramDisplay, "aaa %0.2f", fff.get());
-		return _paramDisplay;
-	}
-	else if (type == typeid(ofParameter<string>).name())
-	{
-		ofParameter<string> fff = para.cast<string>();
-		sprintf(_paramDisplay, "%s", fff->c_str());
-		return _paramDisplay;
-	}
-	else if (type == typeid(ofParameter<bool>).name() || type == typeid(_FFGL_event).name())
-	{
-		ofParameter<bool>& fff = para.cast<bool>();
-		sprintf(_paramDisplay, "%d", fff);
-		return _paramDisplay;
-	}
-
-	return 0;
-}
-	
+// 
+// char*	ofFFGLPlugin::GetParameterDisplay(DWORD dwIndex)
+// {
+// 	if (dwIndex >= _app->paras.size())
+// 		return 0;
+// 
+// 	ofAbstractParameter& para = _app->paras.get(dwIndex);
+// 	string type = para.type();
+// 	if (type == typeid(ofParameter<float>).name())
+// 	{
+// 		ofParameter<float>& fff = para.cast<float>();
+// 		sprintf(_paramDisplay, "aaa %0.2f", fff.get());
+// 		return _paramDisplay;
+// 	}
+// 	else if (type == typeid(ofParameter<string>).name())
+// 	{
+// 		ofParameter<string> fff = para.cast<string>();
+// 		sprintf(_paramDisplay, "%s", fff->c_str());
+// 		return _paramDisplay;
+// 	}
+// 	else if (type == typeid(ofParameter<bool>).name() || type == typeid(_FFGL_event).name())
+// 	{
+// 		ofParameter<bool>& fff = para.cast<bool>();
+// 		sprintf(_paramDisplay, "%d", fff);
+// 		return _paramDisplay;
+// 	}
+// 
+// 	return 0;
+// }
+// 	

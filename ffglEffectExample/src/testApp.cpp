@@ -8,7 +8,7 @@ testApp::testApp()
 	addParameter(_bool_para.set("bool_para", _bool_para));
 	addEventParameter(_event_para.set("event", _event_para));
 	_event_para.addListener(this, &testApp::_on_event);
-	addParameter(_string_para.set("str", _string_para));
+	//addParameter(_string_para.set("str", _string_para));
 }
 
 //--------------------------------------------------------------
