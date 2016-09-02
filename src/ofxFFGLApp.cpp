@@ -55,6 +55,10 @@ void ofFFGLApp::addParameter(ofAbstractParameter& para)
 	{
 		paras.add(para);
 	}
+	else if (type == typeid(ofParameter<ofFloatColor>).name())
+	{
+		paras.add(para);
+	}
 }
 
 void ofFFGLApp::addEventParameter(ofParameter<bool>& para)
