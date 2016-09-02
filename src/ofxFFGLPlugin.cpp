@@ -33,11 +33,12 @@ ofFFGLPlugin::~ofFFGLPlugin()
 
 void ofFFGLPlugin::initParameters()
 {
+	int idx = 0;
 	for (size_t j = 0; j < _app->paras.size(); j++)
 	{
 		ofAbstractParameter& para = _app->paras.get(j);
 		string type = para.type();
-		int idx = j;
+		int step = 1;
 		if (type == typeid(ofParameter<float>).name())
 		{
 			ofParameter<float>& fff = para.cast<float>();
@@ -59,7 +60,16 @@ void ofFFGLPlugin::initParameters()
 			ofParameter<bool>& fff = para.cast<bool>();
 			SetParamInfo(idx, fff.getName().c_str(), FF_TYPE_EVENT, fff);
 		}
-		
+		else if (type == typeid(ofParameter<ofFloatColor>).name())
+		{
+			ofParameter<ofFloatColor>& fff = para.cast<ofFloatColor>();
+			SetParamInfo(idx + 0, (fff.getName()+"_R").c_str(), FF_TYPE_RED, fff->r);
+			SetParamInfo(idx + 1, (fff.getName()+"_G").c_str(), FF_TYPE_GREEN, fff->g);
+			SetParamInfo(idx + 2, (fff.getName()+"_B").c_str(), FF_TYPE_BLUE, fff->b);
+			//SetParamInfo(idx + 3, (fff.getName()+"_A").c_str(), 11, fff->a);
+			step = 3;
+		}
+		idx += step;
 		/*
 			#define FF_TYPE_RED					2
 			#define FF_TYPE_GREEN				3
@@ -206,10 +216,31 @@ DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 {
 	DWORD dwRet = FF_FAIL;
 
-	if (dwIndex >= _app->paras.size())
+	//if (dwIndex >= _app->paras.size())
+	//	return FF_FAIL;
+	if(dwIndex >= GetNumParams())
 		return FF_FAIL;
 
-	ofAbstractParameter& para = _app->paras.get(dwIndex);
+	int count_idx = 0;
+	int para_idx = 0;
+	for (int i = 0; i < _app->paras.size(); ++i)
+	{
+		int step = 1;
+		ofAbstractParameter& para = _app->paras.get(i);
+		string type = para.type();
+		if (type == typeid(ofParameter<ofFloatColor>).name())
+			step = 3;
+
+		if (dwIndex >= count_idx && dwIndex < count_idx + step)
+		{
+			para_idx = i;
+			break;
+		}
+		count_idx += step;
+	}
+
+	//ofAbstractParameter& para = _app->paras.get(dwIndex);
+	ofAbstractParameter& para = _app->paras.get(para_idx);
 	string type = para.type();
 	if (type == typeid(ofParameter<float>).name())
 	{
@@ -231,6 +262,12 @@ DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 		*((float *)(unsigned)&dwRet) = fff;
 		return dwRet;
 	}
+	else if (type == typeid(ofParameter<ofFloatColor>).name())
+	{
+		ofParameter<ofFloatColor>& fff = para.cast<ofFloatColor>();
+		*((float *)(unsigned)&dwRet) = fff.get().v[dwIndex - count_idx];
+		return dwRet;
+	}
 
 	return FF_FAIL;
 }
@@ -241,10 +278,30 @@ DWORD ofFFGLPlugin::SetParameter(const SetParameterStruct* pParam)
 
 	int idx = pParam->ParameterNumber;
 
-	if (idx >= _app->paras.size())
-		return 0;
+	//if (idx >= _app->paras.size())
+	//	return 0;
+	if (idx >= GetNumParams())
+		return FF_FAIL;
 
-	ofAbstractParameter& para = _app->paras.get(idx);
+	int count_idx = 0;
+	int para_idx = 0;
+	for (int i = 0; i < _app->paras.size(); ++i)
+	{
+		int step = 1;
+		ofAbstractParameter& para = _app->paras.get(i);
+		string type = para.type();
+		if (type == typeid(ofParameter<ofFloatColor>).name())
+			step = 3;
+
+		if (idx >= count_idx && idx < count_idx + step)
+		{
+			para_idx = i;
+			break;
+		}
+		count_idx += step;
+	}
+
+	ofAbstractParameter& para = _app->paras.get(para_idx);
 	string type = para.type();
 	if (type == typeid(ofParameter<float>).name())
 	{
@@ -265,6 +322,24 @@ DWORD ofFFGLPlugin::SetParameter(const SetParameterStruct* pParam)
 		ofParameter<bool>& fff = para.cast<bool>();
 		float val = *((float *)(unsigned)&vp);
 		fff = (bool)val;
+		return FF_SUCCESS;
+	}
+	else if (type == typeid(ofParameter<ofFloatColor>).name())
+	{
+		ofParameter<ofFloatColor>& fff = para.cast<ofFloatColor>();
+		float val = *((float *)(unsigned)&vp);
+		int iii = idx - count_idx;
+		ofFloatColor tmp = fff.get();
+		if (iii == 0)
+			tmp.set(ofFloatColor(val, fff->g, fff->b, fff->a));
+		else if (iii == 1)
+			tmp.set(ofFloatColor(fff->r, val, fff->b, fff->a));
+		else if (iii == 2)
+			tmp.set(ofFloatColor(fff->r, fff->g, val, fff->a));
+		//else if (iii == 3)
+//			tmp.set(ofFloatColor(fff->r, fff->g, fff->b, val));
+		fff = tmp;
+		
 		return FF_SUCCESS;
 	}
 
