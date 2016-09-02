@@ -46,16 +46,11 @@ public:
 	DWORD	GetParameter(DWORD dwIndex);					
 	//char*	GetParameterDisplay(DWORD dwIndex) override;
 	
-protected:
-	char _paramDisplay[100];
-	
+protected:	
 	bool isGLInitialized;
 	
 	shared_ptr<ofFFGLApp>  	_app;
 	shared_ptr<ofAppGLFWWindow>  _ofWin;
-
-	float m_brightness;
-private:
 };
 
 #endif

@@ -131,26 +131,36 @@ void	ofFFGLPlugin::setupInputTextures(ProcessOpenGLStruct* pGL)
 		ofTex->texData.bAllocated = true;
 	}
 }
+namespace
+{
+	template<typename T>
+	inline void set_default_fbo_id(shared_ptr<ofBaseRenderer> r, GLuint fbo_id)
+	{
+		if (dynamic_cast<T*>(r.get()) != nullptr)
+			dynamic_cast<T*>(r.get())->defaultFramebufferId = dynamic_cast<T*>(r.get())->currentFramebufferId = fbo_id;
+	}
 
+	inline void set_default_fbo_id(shared_ptr<ofBaseRenderer> r, GLuint fbo_id)
+	{
+		set_default_fbo_id<ofGLRenderer>(r, fbo_id);
+		set_default_fbo_id<ofGLProgrammableRenderer>(r, fbo_id);
+	}
+}
 DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 {
 	if(!isGLInitialized)
 		return FF_SUCCESS;
-		
-	_ofWin->update();
 	
 	setupInputTextures(pGL);
-
-	GLint mmode;
-	glGetIntegerv(GL_MATRIX_MODE,&mmode);
-
 	// this could be optimized...alot
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
-	// draw
-	_ofWin->draw();
-	
+	glPushAttrib(GL_ALL_ATTRIB_BITS);	
+	{
+		set_default_fbo_id(_ofWin->renderer(), pGL->HostFBO);
+		_ofWin->update();
+		_ofWin->draw();
+	}
 	glPopAttrib();
-	glMatrixMode(mmode);
+	
 
 	// we reset the host fbo id here
 	// in case we have been rendering offscreen in the plugin.
