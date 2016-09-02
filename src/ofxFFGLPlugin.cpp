@@ -22,7 +22,7 @@ ofFFGLPlugin::ofFFGLPlugin( ofFFGLApp * app, int minInputs, int maxInputs )
 	_app = shared_ptr<ofFFGLApp>(app);
 
 	initParameters();
-	
+
 	isGLInitialized = false;
 }
 
@@ -60,6 +60,7 @@ void ofFFGLPlugin::initParameters()
 			SetParamInfo(idx, fff.getName().c_str(), FF_TYPE_EVENT, fff);
 		}
 		
+		SetTimeSupported(true);
 		/*
 			#define FF_TYPE_RED					2
 			#define FF_TYPE_GREEN				3
@@ -72,23 +73,33 @@ void ofFFGLPlugin::initParameters()
 
 DWORD ofFFGLPlugin::InitGL(const FFGLViewportStruct *vp)
 {
-	shared_ptr<ofxFFGLWindow> _ofWin = shared_ptr<ofxFFGLWindow>(new ofxFFGLWindow());
-
 	ofInit();
 	ofSetLogLevel(ofLogLevel::OF_LOG_VERBOSE);
-	ofLogToFile(ofVAArgsToString("E:\\logs/%s_log.txt", ofGetTimestampString("%Y-%m-%d-%H-%M-%S").c_str()));
+	//ofLogToFile(ofVAArgsToString("E:\\logs/%s_log.txt", ofGetTimestampString("%Y-%m-%d-%H-%M-%S").c_str()));
 	ofDisableArbTex();
+
+#if 1
+	shared_ptr<ofxFFGLWindow> _ofWin = shared_ptr<ofxFFGLWindow>(new ofxFFGLWindow());
 	ofGLFWWindowSettings settings;
 	settings.multiMonitorFullScreen = false;
 	//settings.setGLVersion(4, 3);
-	//settings.setGLVersion(3, 2);
 	settings.windowMode = OF_WINDOW;
 	settings.width = vp->width;
 	settings.height = vp->height;
 	settings.visible = false;
 	ofGetMainLoop()->addWindow(_ofWin);
 	_ofWin->setup(settings);
+#else
+	shared_ptr<ofAppGlutWindow> _ofWin = shared_ptr<ofAppGlutWindow>(new ofAppGlutWindow());
+	ofGLWindowSettings settings;
+	settings.setGLVersion(4, 3);
+	settings.windowMode = OF_WINDOW;
+	settings.width = vp->width;
+	settings.height = vp->height;
+	ofGetMainLoop()->addWindow(_ofWin);
+	_ofWin->setup(settings);
 	//_ofWin->disableSetupScreen();
+#endif
 
 	ofRunApp(_ofWin, _app);
 
@@ -154,17 +165,7 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 	if(!isGLInitialized)
 		return FF_SUCCESS;
 
-
-#if 0
-	GLint currentFrameBuffer;
-	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
-	ofGLProgrammableRenderer* rdr = (ofGLProgrammableRenderer*)ofGetMainLoop()->getCurrentWindow()->renderer().get();
-	//if(rdr)
-		//rdr->currentFramebufferId = rdr->defaultFramebufferId = pGL->HostFBO;
-		rdr->currentFramebufferId = rdr->defaultFramebufferId = currentFrameBuffer;
-#else
 	set_default_fbo_id(ofGetMainLoop()->getCurrentWindow()->renderer(), pGL->HostFBO);
-#endif
 	setupInputTextures(pGL);
 	// this could be optimized...alot
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -199,7 +200,8 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 DWORD	ofFFGLPlugin::SetTime(double time)
 {
 	// todo.....
-	 return FF_SUCCESS; 
+	ofLogVerbose("ofFFGLPlugin", "%f", time);
+	return FF_SUCCESS; 
 }
 
 DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)

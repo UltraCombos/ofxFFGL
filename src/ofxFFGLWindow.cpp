@@ -89,12 +89,6 @@ void ofxFFGLWindow::setup(const ofGLFWWindowSettings & _settings){
 		return;
 	}
 
-	GLFWwindow * sharedContext = nullptr;
-	sharedContext = glfwGetCurrentContext();
-	if (sharedContext == NULL)
-		ofLogNotice("ofxFFGLWindow", "null context");
-
-
 	settings = _settings;
 
 	if (!glfwInit()) {
@@ -133,10 +127,10 @@ void ofxFFGLWindow::setup(const ofGLFWWindowSettings & _settings){
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glVersionMajor);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.glVersionMinor);
 		if((settings.glVersionMajor==3 && settings.glVersionMinor>=2) || settings.glVersionMajor>=4){
-			//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		}
 		if(settings.glVersionMajor>=3){
-			//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 			currentRenderer = shared_ptr<ofBaseRenderer>(new ofGLProgrammableRenderer(this));
 		}else
 		{
@@ -144,12 +138,11 @@ void ofxFFGLWindow::setup(const ofGLFWWindowSettings & _settings){
 		}
 	#endif
 
-	
+	GLFWwindow * sharedContext = nullptr;
 	if(settings.shareContextWith){
 		sharedContext = (GLFWwindow*)settings.shareContextWith->getWindowContext();
 	}
 
-	
 	if(settings.windowMode==OF_GAME_MODE){
 		int count;
 		GLFWmonitor** monitors = glfwGetMonitors(&count);
@@ -340,21 +333,21 @@ void ofxFFGLWindow::draw(){
 	if (currentRenderer->getBackgroundAuto() == false){
 		// on a PC resizing a window with this method of accumulation (essentially single buffering)
 		// is BAD, so we clear on resize events.
-// 		if (nFramesSinceWindowResized < 3){
-// 			currentRenderer->clear();
-// 		} else {
-// 			if ( (events().getFrameNum() < 3 || nFramesSinceWindowResized < 3) && settings.doubleBuffering){
-// 				glfwSwapBuffers(windowP);
-// 			}else{
-// 				glFlush();
-// 			}
-// 		}
+		if (nFramesSinceWindowResized < 3){
+			currentRenderer->clear();
+		} else {
+			if ( (events().getFrameNum() < 3 || nFramesSinceWindowResized < 3) && settings.doubleBuffering){
+				glfwSwapBuffers(windowP);
+			}else{
+				glFlush();
+			}
+		}
 	} else {
-// 		if(settings.doubleBuffering){
-// 		    glfwSwapBuffers(windowP);
-// 		} else {
-// 			glFlush();
-// 		}
+		if(settings.doubleBuffering){
+		    glfwSwapBuffers(windowP);
+		} else {
+			glFlush();
+		}
 	}
 	#else
 		if (currentRenderer->getBackgroundAuto() == false){
