@@ -57,10 +57,13 @@ ofxFFGLWindow::~ofxFFGLWindow(){
 }
 
 void ofxFFGLWindow::close(){
-	if(windowP){
-		//hide the window before we destroy it stops a flicker on OS X on exit. 
+	if (windowP) {
+		//hide the window before we destroy it stops a flicker on OS X on exit.
+		ofLogVerbose("ofxFFGLWindow", "close");
+
 		glfwHideWindow(windowP);
 		glfwDestroyWindow(windowP);
+		glfwTerminate();
 		windowP = nullptr;
 		events().disable();
 		bWindowNeedsShowing = true;
@@ -260,14 +263,14 @@ void ofxFFGLWindow::setup(const ofGLFWWindowSettings & _settings){
     }
 
 //    setVerticalSync(true);
-// 	glfwSetMouseButtonCallback(windowP, mouse_cb);
-// 	glfwSetCursorPosCallback(windowP, motion_cb);
-// 	glfwSetCursorEnterCallback(windowP, entry_cb);
-// 	glfwSetKeyCallback(windowP, keyboard_cb);
-// 	glfwSetWindowSizeCallback(windowP, resize_cb);
-// 	glfwSetWindowCloseCallback(windowP, exit_cb);
-// 	glfwSetScrollCallback(windowP, scroll_cb);
-// 	glfwSetDropCallback(windowP, drop_cb);
+	glfwSetMouseButtonCallback(windowP, mouse_cb);
+	glfwSetCursorPosCallback(windowP, motion_cb);
+	glfwSetCursorEnterCallback(windowP, entry_cb);
+	glfwSetKeyCallback(windowP, keyboard_cb);
+	glfwSetWindowSizeCallback(windowP, resize_cb);
+	glfwSetWindowCloseCallback(windowP, exit_cb);
+	glfwSetScrollCallback(windowP, scroll_cb);
+	glfwSetDropCallback(windowP, drop_cb);
 }
 
 #ifdef TARGET_LINUX
@@ -375,8 +378,10 @@ bool ofxFFGLWindow::getWindowShouldClose(){
 
 //--------------------------------------------
 void ofxFFGLWindow::setWindowShouldClose(){
+	ofLogVerbose("ofxFFGLWindow", "setWindowShouldClose");
 	glfwSetWindowShouldClose(windowP,1);
 	events().notifyExit();
+	close();
 }
 
 //------------------------------------------------------------
