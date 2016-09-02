@@ -9,7 +9,7 @@
 
 
 #include "ofxFFGLApp.h"
-#include "ofAppGLFWWindow.h"
+#include "ofxFFGLWindow.h"
 #include "FFGLPluginInfo.h"
 
 #include <FFGL.h>
@@ -36,7 +36,6 @@ public:
   	DWORD InitGL(const FFGLViewportStruct *vp);
 	DWORD DeInitGL();
 
-
 	DWORD	ProcessOpenGL(ProcessOpenGLStruct* pGL);
 	void	setupInputTextures(ProcessOpenGLStruct* pGL);
 	
@@ -52,9 +51,6 @@ protected:
 	bool isGLInitialized;
 	
 	shared_ptr<ofFFGLApp>  	_app;
-	shared_ptr<ofAppGLFWWindow>  _ofWin;
-
-	float m_brightness;
 private:
 };
 

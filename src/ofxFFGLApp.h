@@ -28,8 +28,6 @@ class ofFFGLApp : public ofBaseApp {
         ofFFGLApp();
 		virtual ~ofFFGLApp();
 		
-		ofParameterGroup paras;
-		
 		// These functions add a parameter to the plugin, pass the address of the variable that will be automatically updated.
 		// We could add normal FFGL parameter handling but this way even though it is more limited, it makes life much easier
 		// Parameters MUST be added in the constructor or FFGL will ignore them.
@@ -37,7 +35,9 @@ class ofFFGLApp : public ofBaseApp {
 		void addEventParameter(ofParameter<bool>& para);
 		
 		ofTexture * inputTextures[MAX_INPUT_TEXTURES];
+		friend class ofFFGLPlugin;
 private:
+	ofParameterGroup paras;
 };
 
 #endif

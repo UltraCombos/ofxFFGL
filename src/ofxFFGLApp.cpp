@@ -14,7 +14,7 @@ ofFFGLApp::ofFFGLApp()
 {
 	paras.clear();
 	for( int i = 0; i < MAX_INPUT_TEXTURES; i++ )
-		inputTextures[i] = 0;
+		inputTextures[i] = nullptr;
 }
 
 ofFFGLApp::~ofFFGLApp()

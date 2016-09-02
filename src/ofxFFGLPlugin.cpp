@@ -72,7 +72,7 @@ void ofFFGLPlugin::initParameters()
 
 DWORD ofFFGLPlugin::InitGL(const FFGLViewportStruct *vp)
 {
-	_ofWin = shared_ptr<ofAppGLFWWindow>(new ofAppGLFWWindow());
+	shared_ptr<ofxFFGLWindow> _ofWin = shared_ptr<ofxFFGLWindow>(new ofxFFGLWindow());
 
 	ofInit();
 	ofGLFWWindowSettings settings;
@@ -86,8 +86,6 @@ DWORD ofFFGLPlugin::InitGL(const FFGLViewportStruct *vp)
 	_ofWin->setup(settings);
 
 	ofRunApp(_ofWin, _app);
-
-	//glDisable( GL_DEPTH_TEST );
 
 	/// TODO! 
 	/// handle Resouce folder in mac, and .rc files on windoz
@@ -136,9 +134,17 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 {
 	if(!isGLInitialized)
 		return FF_SUCCESS;
-		
-	_ofWin->update();
-	
+
+#if 1
+#if 0
+	ofGLRenderer* rdr = (ofGLRenderer*)_ofWin->renderer().get();
+	rdr->defaultFramebufferId = pGL->HostFBO;
+#else
+	ofGLProgrammableRenderer* rdr = (ofGLProgrammableRenderer*)ofGetMainLoop()->getCurrentWindow()->renderer().get();
+	if(rdr)
+		rdr->defaultFramebufferId = pGL->HostFBO;
+#endif
+#endif
 	setupInputTextures(pGL);
 
 	GLint mmode;
@@ -147,8 +153,9 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 	// this could be optimized...alot
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	// draw
-	_ofWin->draw();
-	
+
+	ofGetMainLoop()->loopOnce();
+
 	glPopAttrib();
 	glMatrixMode(mmode);
 
@@ -201,7 +208,7 @@ DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 	{
 		ofParameter<string>& fff = para.cast<string>();
 		const char * str = fff->c_str();
-		//dwRet = (DWORD)str;
+		dwRet = (DWORD)str;
 		return dwRet;
 	}
 	else if (type == typeid(ofParameter<bool>).name() || type == typeid(_FFGL_event).name())
