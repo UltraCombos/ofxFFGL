@@ -36,6 +36,8 @@ class testApp : public ofFFGLApp{
 			if (_string_para->length() > 50)
 				_string_para = "";
 		}
+
+		ofFbo fbo;
 };
 
 #endif

@@ -208,6 +208,7 @@ src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     <ClCompile Include="..\libs\FFGL\FFGLShader.cpp" />
     <ClCompile Include="..\src\ofxFFGLApp.cpp" />
     <ClCompile Include="..\src\ofxFFGLPlugin.cpp" />
+    <ClCompile Include="..\src\ofxFFGLWindow.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\testApp.cpp" />
   </ItemGroup>
@@ -224,6 +225,7 @@ src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     <ClInclude Include="..\libs\FFGL\FreeFrame.h" />
     <ClInclude Include="..\src\ofxFFGLApp.h" />
     <ClInclude Include="..\src\ofxFFGLPlugin.h" />
+    <ClInclude Include="..\src\ofxFFGLWindow.h" />
     <ClInclude Include="src\testApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -13,15 +13,18 @@ testApp::testApp()
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	_string_para += "setup!!!";
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	ofBackground(100,100,100);
+	//ofBackground(200,100,100);
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	ofPushMatrix(); 
+	ofSetupScreen();
 	// input textures from host are stored here
 	ofTexture * tex = inputTextures[0];
 	
@@ -30,16 +33,36 @@ void testApp::draw(){
 
 	int nrep = numRepeats;
 
+#if 0
+	float w = (float)1.f / nrep;
+	float h = (float)1.f / nrep;
+#else
 	float w = (float)ofGetWidth() / nrep;
 	float h = (float)ofGetHeight() / nrep;
-
-	for( int y = 0; y < nrep; y++ )
-		for( int x = 0; x < nrep; x++ )
+#endif
+	for (int y = 0; y < nrep; y++)
+	{
+		for (int x = 0; x < nrep - 1; x++)
 		{
-			tex->draw(w*x,h*y,w,h);
+			tex->draw(w*x, h*y, w*0.9, h*0.9);
 		}
-	ofDrawBitmapString(_string_para, 0, ofGetHeight()/2);
-	ofDrawBitmapString(_bool_para, 0, ofGetHeight() / 2 + 20);
+	}
+
+	if (fbo.isAllocated() == false)
+		fbo.allocate(tex->getWidth(), tex->getHeight());
+	fbo.begin();
+	ofClear(ofColor::blueSteel);
+	fbo.end();
+
+	fbo.draw(w, 0, w, h);
+
+	ofSetColor(ofColor::gray);
+	ofRect(0, 0, w, h);
+
+	ofPopMatrix();
+ 	//ofDrawBitmapString(_string_para, 0, ofGetHeight()/2);
+// 	ofSetColor(ofColor::red);
+// 	ofDrawBitmapString(_bool_para, 0, ofGetHeight() / 2 + 20);
 }
 
 
