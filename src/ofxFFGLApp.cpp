@@ -34,6 +34,15 @@ ofFFGLApp::~ofFFGLApp()
 void ofFFGLApp::addParameter(ofAbstractParameter& para)
 {
 	string type = para.type();
+	if (type == typeid(ofParameterGroup).name())
+	{
+		ofParameterGroup & group = dynamic_cast<ofParameterGroup&>(para);
+		for (auto p : group)
+		{
+			addParameter(*(p.get()));
+		}
+
+	}
 	if (type == typeid(ofParameter<float>).name())
 	{
 		paras.add(para);

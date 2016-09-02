@@ -81,7 +81,7 @@ DWORD ofFFGLPlugin::InitGL(const FFGLViewportStruct *vp)
 	ofGLFWWindowSettings settings;
 	settings.multiMonitorFullScreen = false;
 	//settings.setGLVersion(4, 3);
-	settings.setGLVersion(3, 2);
+	//settings.setGLVersion(3, 2);
 	settings.windowMode = OF_WINDOW;
 	settings.width = vp->width;
 	settings.height = vp->height;
@@ -134,25 +134,38 @@ void	ofFFGLPlugin::setupInputTextures(ProcessOpenGLStruct* pGL)
 		ofTex->texData.bAllocated = true;
 	}
 }
+namespace
+{
+	template<typename T>
+	inline void set_default_fbo_id(shared_ptr<ofBaseRenderer> r, GLuint fbo_id)
+	{
+		if (dynamic_cast<T*>(r.get()) != nullptr)
+			dynamic_cast<T*>(r.get())->defaultFramebufferId = dynamic_cast<T*>(r.get())->currentFramebufferId = fbo_id;
+	}
 
+	inline void set_default_fbo_id(shared_ptr<ofBaseRenderer> r, GLuint fbo_id)
+	{
+		set_default_fbo_id<ofGLRenderer>(r, fbo_id);
+		set_default_fbo_id<ofGLProgrammableRenderer>(r, fbo_id);
+	}
+}
 DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 {
 	if(!isGLInitialized)
 		return FF_SUCCESS;
 
-#if 1
+
+#if 0
 	GLint currentFrameBuffer;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
 	ofGLProgrammableRenderer* rdr = (ofGLProgrammableRenderer*)ofGetMainLoop()->getCurrentWindow()->renderer().get();
 	//if(rdr)
 		//rdr->currentFramebufferId = rdr->defaultFramebufferId = pGL->HostFBO;
 		rdr->currentFramebufferId = rdr->defaultFramebufferId = currentFrameBuffer;
+#else
+	set_default_fbo_id(ofGetMainLoop()->getCurrentWindow()->renderer(), pGL->HostFBO);
 #endif
 	setupInputTextures(pGL);
-
-	GLint mmode;
-	glGetIntegerv(GL_MATRIX_MODE,&mmode);
-
 	// this could be optimized...alot
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	// draw
@@ -160,8 +173,6 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 	ofGetMainLoop()->loopOnce();
 
 	glPopAttrib();
-	glMatrixMode(mmode);
-
 	// we reset the host fbo id here
 	// in case we have been rendering offscreen in the plugin.
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, pGL->HostFBO);
@@ -211,7 +222,7 @@ DWORD ofFFGLPlugin::GetParameter(DWORD dwIndex)
 	{
 		ofParameter<string>& fff = para.cast<string>();
 		const char * str = fff->c_str();
-		dwRet = (DWORD)str;
+		//dwRet = (DWORD)str;
 		return dwRet;
 	}
 	else if (type == typeid(ofParameter<bool>).name() || type == typeid(_FFGL_event).name())

@@ -45,9 +45,8 @@ public:
 	DWORD	GetParameter(DWORD dwIndex);					
 	//char*	GetParameterDisplay(DWORD dwIndex) override;
 	
-protected:
+protected:	
 	char _paramDisplay[100];
-	
 	bool isGLInitialized;
 	
 	shared_ptr<ofFFGLApp>  	_app;
