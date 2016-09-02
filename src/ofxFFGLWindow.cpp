@@ -68,43 +68,6 @@ void ofxFFGLWindow::close(){
 }
 
 //------------------------------------------------------------
-void ofxFFGLWindow::setNumSamples(int _samples){
-	settings.numSamples=_samples;
-}
-
-//------------------------------------------------------------
-void ofxFFGLWindow::setMultiDisplayFullscreen(bool bMultiFullscreen){
-    settings.multiMonitorFullScreen = bMultiFullscreen;
-}
-
-//------------------------------------------------------------
-void ofxFFGLWindow::setDoubleBuffering(bool doubleBuff){
-	settings.doubleBuffering = doubleBuff;
-}
-
-//------------------------------------------------------------
-void ofxFFGLWindow::setColorBits(int r, int g, int b){
-	settings.redBits=r;
-	settings.greenBits=g;
-	settings.blueBits=b;
-}
-
-//------------------------------------------------------------
-void ofxFFGLWindow::setAlphaBits(int a){
-	settings.alphaBits=a;
-}
-
-//------------------------------------------------------------
-void ofxFFGLWindow::setDepthBits(int depth){
-	settings.depthBits=depth;
-}
-
-//------------------------------------------------------------
-void ofxFFGLWindow::setStencilBits(int stencil){
-	settings.stencilBits=stencil;
-}
-
-//------------------------------------------------------------
 #ifdef TARGET_OPENGLES
 void ofxFFGLWindow::setup(const ofGLESWindowSettings & settings){
 #else
@@ -125,14 +88,21 @@ void ofxFFGLWindow::setup(const ofGLFWWindowSettings & _settings){
 		ofLogError() << "calling window->setup() after ofCreateWindow() is not necesary and won't do anything";
 		return;
 	}
+
+	GLFWwindow * sharedContext = nullptr;
+	sharedContext = glfwGetCurrentContext();
+	if (sharedContext == NULL)
+		ofLogNotice("ofxFFGLWindow", "null context");
+
+
 	settings = _settings;
 
-	if(!glfwInit( )){
+	if (!glfwInit()) {
 		ofLogError("ofxFFGLWindow") << "couldn't init GLFW";
 		return;
 	}
 
-//	ofLogNotice("ofxFFGLWindow") << "WINDOW MODE IS " << screenMode;
+	//ofLogNotice("ofxFFGLWindow") << "WINDOW MODE IS " << screenMode;
 
 	glfwDefaultWindowHints();
 	glfwWindowHint(GLFW_RED_BITS, settings.redBits);
@@ -163,21 +133,23 @@ void ofxFFGLWindow::setup(const ofGLFWWindowSettings & _settings){
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, settings.glVersionMajor);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, settings.glVersionMinor);
 		if((settings.glVersionMajor==3 && settings.glVersionMinor>=2) || settings.glVersionMajor>=4){
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		}
 		if(settings.glVersionMajor>=3){
-			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+			//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 			currentRenderer = shared_ptr<ofBaseRenderer>(new ofGLProgrammableRenderer(this));
-		}else{
+		}else
+		{
 			currentRenderer = shared_ptr<ofBaseRenderer>(new ofGLRenderer(this));
 		}
 	#endif
 
-	GLFWwindow * sharedContext = nullptr;
+	
 	if(settings.shareContextWith){
 		sharedContext = (GLFWwindow*)settings.shareContextWith->getWindowContext();
 	}
 
+	
 	if(settings.windowMode==OF_GAME_MODE){
 		int count;
 		GLFWmonitor** monitors = glfwGetMonitors(&count);
@@ -294,15 +266,15 @@ void ofxFFGLWindow::setup(const ofGLFWWindowSettings & _settings){
     	static_cast<ofGLRenderer*>(currentRenderer.get())->setup();
     }
 
-    setVerticalSync(true);
-	glfwSetMouseButtonCallback(windowP, mouse_cb);
-	glfwSetCursorPosCallback(windowP, motion_cb);
-	glfwSetCursorEnterCallback(windowP, entry_cb);
-	glfwSetKeyCallback(windowP, keyboard_cb);
-	glfwSetWindowSizeCallback(windowP, resize_cb);
-	glfwSetWindowCloseCallback(windowP, exit_cb);
-	glfwSetScrollCallback(windowP, scroll_cb);
-	glfwSetDropCallback(windowP, drop_cb);
+//    setVerticalSync(true);
+// 	glfwSetMouseButtonCallback(windowP, mouse_cb);
+// 	glfwSetCursorPosCallback(windowP, motion_cb);
+// 	glfwSetCursorEnterCallback(windowP, entry_cb);
+// 	glfwSetKeyCallback(windowP, keyboard_cb);
+// 	glfwSetWindowSizeCallback(windowP, resize_cb);
+// 	glfwSetWindowCloseCallback(windowP, exit_cb);
+// 	glfwSetScrollCallback(windowP, scroll_cb);
+// 	glfwSetDropCallback(windowP, drop_cb);
 }
 
 #ifdef TARGET_LINUX
@@ -368,21 +340,21 @@ void ofxFFGLWindow::draw(){
 	if (currentRenderer->getBackgroundAuto() == false){
 		// on a PC resizing a window with this method of accumulation (essentially single buffering)
 		// is BAD, so we clear on resize events.
-		if (nFramesSinceWindowResized < 3){
-			currentRenderer->clear();
-		} else {
-			if ( (events().getFrameNum() < 3 || nFramesSinceWindowResized < 3) && settings.doubleBuffering){
-				glfwSwapBuffers(windowP);
-			}else{
-				glFlush();
-			}
-		}
+// 		if (nFramesSinceWindowResized < 3){
+// 			currentRenderer->clear();
+// 		} else {
+// 			if ( (events().getFrameNum() < 3 || nFramesSinceWindowResized < 3) && settings.doubleBuffering){
+// 				glfwSwapBuffers(windowP);
+// 			}else{
+// 				glFlush();
+// 			}
+// 		}
 	} else {
-		if(settings.doubleBuffering){
-		    glfwSwapBuffers(windowP);
-		} else {
-			glFlush();
-		}
+// 		if(settings.doubleBuffering){
+// 		    glfwSwapBuffers(windowP);
+// 		} else {
+// 			glFlush();
+// 		}
 	}
 	#else
 		if (currentRenderer->getBackgroundAuto() == false){
@@ -562,12 +534,12 @@ void ofxFFGLWindow::setWindowShape(int w, int h){
 
 //------------------------------------------------------------
 void ofxFFGLWindow::hideCursor(){
-	glfwSetInputMode(windowP,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
+	//glfwSetInputMode(windowP,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
 };
 
 //------------------------------------------------------------
 void ofxFFGLWindow::showCursor(){
-	glfwSetInputMode(windowP,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(windowP,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
 };
 
 //------------------------------------------------------------

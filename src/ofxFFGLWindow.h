@@ -68,7 +68,6 @@ public:
 	static bool needsPolling(){ return true; }
 	static void pollEvents(){ glfwPollEvents(); }
 
-
     // this functions are only meant to be called from inside OF don't call them from your code
     using ofAppBaseWindow::setup;
 #ifdef TARGET_OPENGLES
@@ -131,16 +130,6 @@ public:
 	bool isWindowActive();
 	bool isWindowResizeable();
 	void iconify(bool bIconify);
-
-	// window settings, this functions can only be called from main before calling ofSetupOpenGL
-	// TODO: remove specialized version of ofSetupOpenGL when these go away
-	OF_DEPRECATED_MSG("use ofGLFWWindowSettings to create the window instead", void setNumSamples(int samples));
-	OF_DEPRECATED_MSG("use ofGLFWWindowSettings to create the window instead", void setDoubleBuffering(bool doubleBuff));
-	OF_DEPRECATED_MSG("use ofGLFWWindowSettings to create the window instead", void setColorBits(int r, int g, int b));
-	OF_DEPRECATED_MSG("use ofGLFWWindowSettings to create the window instead", void setAlphaBits(int a));
-	OF_DEPRECATED_MSG("use ofGLFWWindowSettings to create the window instead", void setDepthBits(int depth));
-	OF_DEPRECATED_MSG("use ofGLFWWindowSettings to create the window instead", void setStencilBits(int stencil));
-	OF_DEPRECATED_MSG("use ofGLFWWindowSettings to create the window instead", void setMultiDisplayFullscreen(bool bMultiFullscreen)); //note this just enables the mode, you have to toggle fullscreen to activate it.
 
 #if defined(TARGET_LINUX) && !defined(TARGET_RASPBERRY_PI)
 	Display* 	getX11Display();

@@ -75,15 +75,20 @@ DWORD ofFFGLPlugin::InitGL(const FFGLViewportStruct *vp)
 	shared_ptr<ofxFFGLWindow> _ofWin = shared_ptr<ofxFFGLWindow>(new ofxFFGLWindow());
 
 	ofInit();
+	ofSetLogLevel(ofLogLevel::OF_LOG_VERBOSE);
+	ofLogToFile(ofVAArgsToString("E:\\logs/%s_log.txt", ofGetTimestampString("%Y-%m-%d-%H-%M-%S").c_str()));
+	ofDisableArbTex();
 	ofGLFWWindowSettings settings;
 	settings.multiMonitorFullScreen = false;
 	//settings.setGLVersion(4, 3);
+	settings.setGLVersion(3, 2);
 	settings.windowMode = OF_WINDOW;
 	settings.width = vp->width;
 	settings.height = vp->height;
 	settings.visible = false;
 	ofGetMainLoop()->addWindow(_ofWin);
 	_ofWin->setup(settings);
+	//_ofWin->disableSetupScreen();
 
 	ofRunApp(_ofWin, _app);
 
@@ -98,7 +103,7 @@ DWORD ofFFGLPlugin::InitGL(const FFGLViewportStruct *vp)
 
 DWORD ofFFGLPlugin::DeInitGL()
 {
-	_app->exit();
+	ofGetMainLoop()->exit();
 	isGLInitialized = false;
 	return FF_SUCCESS;
 }
@@ -136,14 +141,12 @@ DWORD	ofFFGLPlugin::ProcessOpenGL(ProcessOpenGLStruct* pGL)
 		return FF_SUCCESS;
 
 #if 1
-#if 0
-	ofGLRenderer* rdr = (ofGLRenderer*)_ofWin->renderer().get();
-	rdr->defaultFramebufferId = pGL->HostFBO;
-#else
+	GLint currentFrameBuffer;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
 	ofGLProgrammableRenderer* rdr = (ofGLProgrammableRenderer*)ofGetMainLoop()->getCurrentWindow()->renderer().get();
-	if(rdr)
-		rdr->defaultFramebufferId = pGL->HostFBO;
-#endif
+	//if(rdr)
+		//rdr->currentFramebufferId = rdr->defaultFramebufferId = pGL->HostFBO;
+		rdr->currentFramebufferId = rdr->defaultFramebufferId = currentFrameBuffer;
 #endif
 	setupInputTextures(pGL);
 
