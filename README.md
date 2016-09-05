@@ -2,6 +2,7 @@
 - this is a work in progress, the main focus wil be on Windows development.
 - supports oF 0.9.3
 - for now, you need to comment out line 97 in ofAppRunner.cpp, or the compiled .dll will not run in Arena/Avenue.
+- and you need to make GLuint defaultFramebufferId; GLuint currentFramebufferId; to public to compile the project
 - this work is based on https://github.com/sambenito/ofxffglplugin by Daniel Berio <http://www.enist.org>
 
 ------------------------------------------------------------------------------------------------
